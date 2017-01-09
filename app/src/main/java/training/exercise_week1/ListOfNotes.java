@@ -1,5 +1,6 @@
 package training.exercise_week1;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +18,8 @@ public class ListOfNotes extends AppCompatActivity {
     private Button addNoteButton;
     private ListView listView;
 
-    private ArrayList<String> listItems;
+    //    private ArrayList<String> listItems;
+    private ArrayList<Note> listItems;
     private ListAdapter adapter;
 
     @Override
@@ -31,23 +33,21 @@ public class ListOfNotes extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
 
         listView.setAdapter(adapter);
-        addElementInList("testPrim123-1");
+        addElementInList("testPrim123-1", "content");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    public void addElementInList(String noteSubject) {
-        listItems.add(0, noteSubject);
+    //    public void addElementInList(String noteSubject) {
+    public void addElementInList(String noteSubject, String noteContent) {
+        listItems.add(0, new Note(noteSubject, noteContent));
         listView.setAdapter(null);
         listView.setAdapter(adapter);
         Toast.makeText(this, noteSubject, Toast.LENGTH_SHORT).show();
     }
 
     public void addNoteClicked(View view) {
-        addElementInList("test 0");
+        Intent intent = new Intent(this, AddNote.class);
+        startActivity(intent);
+
     }
 
 

@@ -1,6 +1,8 @@
 package training.exercise_week1;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable{
     private String subject;
     private String content;
 

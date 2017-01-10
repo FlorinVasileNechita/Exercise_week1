@@ -2,4 +2,8 @@
     <string name="app_name">Exercise_week1</string>
     <string name="add_note">Add note</string>
     <string name="add_note_button">Add note</string>
+    <string name="subject">Subject:</string>
+    <string name="content">Content:</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

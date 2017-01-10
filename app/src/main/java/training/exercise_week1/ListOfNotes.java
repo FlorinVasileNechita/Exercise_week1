@@ -12,13 +12,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 public class ListOfNotes extends AppCompatActivity {
 
     private Button addNoteButton;
     private ListView listView;
 
-    //    private ArrayList<String> listItems;
     private ArrayList<Note> listItems;
     private ListAdapter adapter;
 
@@ -36,7 +34,6 @@ public class ListOfNotes extends AppCompatActivity {
         addElementInList("testPrim123-1", "content");
     }
 
-    //    public void addElementInList(String noteSubject) {
     public void addElementInList(String noteSubject, String noteContent) {
         listItems.add(0, new Note(noteSubject, noteContent));
         listView.setAdapter(null);
@@ -45,10 +42,17 @@ public class ListOfNotes extends AppCompatActivity {
     }
 
     public void addNoteClicked(View view) {
-        Intent intent = new Intent(this, AddNote.class);
-        startActivity(intent);
-
+//        goToAddNote(new Note("hahah1","1"));
+        goToAddNote(null);
     }
+
+    private void goToAddNote(Note note){
+        Intent intent = new Intent(this, AddNote.class);
+        intent.putExtra("Note", note);
+        startActivity(intent);
+    }
+
+
 
 
 }

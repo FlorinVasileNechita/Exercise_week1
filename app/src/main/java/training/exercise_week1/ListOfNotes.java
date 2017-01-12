@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,6 +21,8 @@ public class ListOfNotes extends AppCompatActivity {
 
     private Note noteReceived;
 
+    private SomeFunctions sf = new SomeFunctions();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +32,17 @@ public class ListOfNotes extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
 
-//        listView.setAdapter(adapter);
-        addElementInList("testPrim123-1", "content");
-
         handleReceivedData();
 
+    }
+
+    public void addNoteClicked(View view) {
+        goToAddNote(null);
+    }
+
+    public void dateAndTimeClicked(View view) {
+        String str = sf.getCurrentDateAndTime();
+        addElementInList(str, str);
     }
 
     private void handleReceivedData() {
@@ -44,38 +51,18 @@ public class ListOfNotes extends AppCompatActivity {
             noteReceived = (Note) receivedIntent.getSerializableExtra("Note");
             addElementInList(noteReceived.getSubject(), noteReceived.getContent());
         } catch (Exception ex) {
-            showToastMessage("No data received!");
+            sf.showToastMessage(this, "No data received!", false);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-//        outState.putSerializable("ArrayList<Note>",listItems);
-        outState.putSerializable("listItems", listItems);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        listItems = (ArrayList<Note>) savedInstanceState.getSerializable("listItems");
-        refreshList();
     }
 
     public void addElementInList(String noteSubject, String noteContent) {
         listItems.add(0, new Note(noteSubject, noteContent));
         refreshList();
-        Toast.makeText(this, noteSubject, Toast.LENGTH_SHORT).show();
     }
 
     private void refreshList() {
         listView.setAdapter(null);
         listView.setAdapter(adapter);
-
-    }
-
-    public void addNoteClicked(View view) {
-        goToAddNote(null);
     }
 
     private void goToAddNote(Note note) {
@@ -83,10 +70,4 @@ public class ListOfNotes extends AppCompatActivity {
         intent.putExtra("Note", note);
         startActivity(intent);
     }
-
-    private void showToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-
 }

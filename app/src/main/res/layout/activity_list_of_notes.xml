@@ -25,8 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/add_note_button"
-        android:onClick="addNoteClicked"/>
+        android:onClick="addNoteClicked"
+        android:text="@string/add_note_button" />
+
+    <Button
+        android:id="@+id/currentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="dateAndTimeClicked"
+        android:text="Date+Time" />
 
 
 </RelativeLayout>

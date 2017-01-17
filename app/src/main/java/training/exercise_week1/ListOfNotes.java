@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 
 public class ListOfNotes extends AppCompatActivity {
 
-    private Button addNoteButton;
     private ListView listView;
 
     private ArrayList<Note> listItems = new ArrayList<>();
@@ -29,7 +27,6 @@ public class ListOfNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_notes);
 
-        addNoteButton = (Button) findViewById(R.id.addNoteButton);
         listView = (ListView) findViewById(R.id.listView);
 
         if (adapter == null) {
@@ -43,11 +40,16 @@ public class ListOfNotes extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String
+                        Note note = (Note) parent.getItemAtPosition(position);
+                        itemClicked(note);
                     }
                 }
         );
 
+    }
+
+    public void itemClicked(Note note) {
+        goToAddNoteActivity(note);
     }
 
     //    http://stackoverflow.com/questions/14292398/how-to-pass-data-from-2nd-activity-to-1st-activity-when-pressed-back-android
@@ -56,20 +58,29 @@ public class ListOfNotes extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Note note = (Note) data.getSerializableExtra("Note");
-                sf.showToastMessage(this, note.getSubject(), true);
                 addElementInList(note.getSubject(), note.getContent());
+            }
+            if (resultCode == RESULT_FIRST_USER) {
+                Note note = (Note) data.getSerializableExtra("Note");
+                Note oldNote = (Note) data.getSerializableExtra("OldNote");
+                updateElementInList(note, oldNote);
             }
         }
     }
 
-    public void addNoteClicked(View view) {
+    private void goToAddNoteActivity(Note note) {
         Intent i = new Intent(this, AddNote.class);
+        i.putExtra("Note", note);
         startActivityForResult(i, 1);
+    }
+
+    public void addNoteClicked(View view) {
+        goToAddNoteActivity(null);
     }
 
     public void dateAndTimeClicked(View view) {
         String str = sf.getCurrentDateAndTime();
-        addElementInList(str, str);
+        addElementInList("S" + str, "C" + str);
     }
 
     public void addElementInList(String noteSubject, String noteContent) {
@@ -77,11 +88,24 @@ public class ListOfNotes extends AppCompatActivity {
         refreshList();
     }
 
+    public void updateElementInList(Note note, Note oldNote) {
+        int pos = 0;
+        for (int i = 0; i < listItems.size(); i++) {
+            if (listItems.get(i).getSubject().equals(oldNote.getSubject()) && listItems.get(i).getContent().equals(oldNote.getContent())) {
+                pos = i;
+                break;
+            }
+        }
+        listItems.get(pos).setSubject(note.getSubject());
+        listItems.get(pos).setContent(note.getContent());
+        refreshList();
+
+    }
+
     private void refreshList() {
         listView.setAdapter(null);
         listView.setAdapter(adapter);
     }
-
 
 
 }

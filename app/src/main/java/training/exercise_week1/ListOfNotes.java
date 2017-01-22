@@ -40,6 +40,7 @@ public class ListOfNotes extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+<<<<<<< Updated upstream
                         Note note = (Note) parent.getItemAtPosition(position);
                         itemClicked(note);
                     }

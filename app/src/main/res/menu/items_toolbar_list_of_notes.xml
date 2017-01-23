@@ -6,6 +6,6 @@
         android:id="@+id/editButton"
         android:orderInCategory="200"
         android:title="@string/edit"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

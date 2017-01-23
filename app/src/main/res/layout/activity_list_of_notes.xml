@@ -21,7 +21,8 @@
         android:layout_above="@+id/addNoteButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="54dp" />
+        android:layout_marginBottom="10dp"
+        android:fastScrollEnabled="false" />
 
     <Button
         android:id="@+id/addNoteButton"

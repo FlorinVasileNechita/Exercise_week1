@@ -119,5 +119,4 @@ public class ListOfNotes extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-
 }

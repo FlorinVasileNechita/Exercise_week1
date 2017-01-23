@@ -3,7 +3,9 @@ package training.exercise_week1;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +29,10 @@ public class ListOfNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_notes);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_list_of_notes);
+        setSupportActionBar(toolbar);
+
+
         listView = (ListView) findViewById(R.id.listView);
 
         if (adapter == null) {
@@ -40,13 +46,18 @@ public class ListOfNotes extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-<<<<<<< Updated upstream
                         Note note = (Note) parent.getItemAtPosition(position);
                         itemClicked(note);
                     }
                 }
         );
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.items_toolbar_list_of_notes, menu);
+        return true;
     }
 
     public void itemClicked(Note note) {

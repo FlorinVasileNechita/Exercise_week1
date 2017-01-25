@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -52,12 +54,31 @@ public class ListOfNotes extends AppCompatActivity {
                 }
         );
 
+//        Button editButton = (Button) findViewById(R.id.editButton);
+//        editButton.setOnClickListener(
+//                new View.OnClickListener() {
+//                    public void onClick(View view) {
+//                        editButtonClicked();
+//                    }
+//                });
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.items_toolbar_list_of_notes, menu);
         return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.editButton) {
+            sf.showToastMessage(this, "Edit button", false);
+        }
+        return false;
     }
 
     public void itemClicked(Note note) {

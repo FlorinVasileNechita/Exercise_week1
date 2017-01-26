@@ -1,5 +1,6 @@
 package training.exercise_week1;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,16 +16,17 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListOfNotes extends AppCompatActivity {
 
-    private ListView listView;
+    private ArrayList<String> subjects = new ArrayList<>();
+    private ArrayList<String> contents = new ArrayList<>();
 
-    private ArrayList<Note> listItems = new ArrayList<>();
-    private ListAdapter adapter;
+    ListAdapter adapter;
+    ListView listView;
 
     private SomeFunctions sf = new SomeFunctions();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,35 +36,37 @@ public class ListOfNotes extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_list_of_notes);
         setSupportActionBar(toolbar);
 
+//        if (adapter == null) {
+//            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
+//            Log.d("ADAPTER", "New adapter was created!");
+//        } else {
+//            Log.d("ADAPTER", "The adapter was already created");
+//        }
+//
+//        listView.setOnItemClickListener(
+//                new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        Note note = (Note) parent.getItemAtPosition(position);
+//                        itemClicked(note);
+//                    }
+//                }
+//        );
 
+        adapter = new CustomAdapter(this, subjects);
         listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(adapter);
 
-        if (adapter == null) {
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
-            Log.d("ADAPTER", "New adapter was created!");
-        } else {
-            Log.d("ADAPTER", "The adapter was already created");
-        }
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Note note = (Note) parent.getItemAtPosition(position);
+                        Note note = new Note(subjects.get(position), contents.get(position));
                         itemClicked(note);
                     }
                 }
         );
-
-//        Button editButton = (Button) findViewById(R.id.editButton);
-//        editButton.setOnClickListener(
-//                new View.OnClickListener() {
-//                    public void onClick(View view) {
-//                        editButtonClicked();
-//                    }
-//                });
-
-
     }
 
     @Override
@@ -117,20 +121,24 @@ public class ListOfNotes extends AppCompatActivity {
     }
 
     public void addElementInList(String noteSubject, String noteContent) {
-        listItems.add(0, new Note(noteSubject, noteContent));
+//        listItems.add(0, new Note(noteSubject, noteContent));
+        subjects.add(0, noteSubject);
+        contents.add(0, noteContent);
         refreshList();
     }
 
     public void updateElementInList(Note note, Note oldNote) {
         int pos = 0;
-        for (int i = 0; i < listItems.size(); i++) {
-            if (listItems.get(i).getSubject().equals(oldNote.getSubject()) && listItems.get(i).getContent().equals(oldNote.getContent())) {
+        for (int i = 0; i < subjects.size(); i++) {
+            if (subjects.get(i).equals(oldNote.getSubject())) {
                 pos = i;
                 break;
             }
         }
-        listItems.get(pos).setSubject(note.getSubject());
-        listItems.get(pos).setContent(note.getContent());
+
+        subjects.set(pos, note.getSubject());
+        contents.set(pos, note.getContent());
+
         refreshList();
 
     }

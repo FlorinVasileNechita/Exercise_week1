@@ -1,32 +1,31 @@
 package training.exercise_week1;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListOfNotes extends AppCompatActivity {
 
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> contents = new ArrayList<>();
 
-    ListAdapter adapter;
-    ListView listView;
+    private ListAdapter adapter;
+    private ListView listView;
 
     private SomeFunctions sf = new SomeFunctions();
+
+    private boolean deleteActivated = false;
+    private TextView clickRowToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +35,26 @@ public class ListOfNotes extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_list_of_notes);
         setSupportActionBar(toolbar);
 
-//        if (adapter == null) {
-//            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
-//            Log.d("ADAPTER", "New adapter was created!");
-//        } else {
-//            Log.d("ADAPTER", "The adapter was already created");
-//        }
-//
-//        listView.setOnItemClickListener(
-//                new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        Note note = (Note) parent.getItemAtPosition(position);
-//                        itemClicked(note);
-//                    }
-//                }
-//        );
-
         adapter = new CustomAdapter(this, subjects);
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Note note = new Note(subjects.get(position), contents.get(position));
-                        itemClicked(note);
+                        if (deleteActivated) {
+                            deleteNote(note);
+                        } else {
+                            itemClicked(note);
+                        }
                     }
                 }
         );
+
+        clickRowToDelete = (TextView) findViewById(R.id.textView_clickToDelete);
+        handleClickToDeleteTextView();
     }
 
     @Override
@@ -75,18 +63,32 @@ public class ListOfNotes extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == R.id.editButton) {
+            deleteActivated = !deleteActivated;
+            handleClickToDeleteTextView();
             sf.showToastMessage(this, "Edit button", false);
         }
         return false;
     }
 
+    private void handleClickToDeleteTextView() {
+        if (!deleteActivated) {
+            clickRowToDelete.setVisibility(View.GONE);
+        } else {
+            clickRowToDelete.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void itemClicked(Note note) {
         goToAddNoteActivity(note);
+    }
+
+    private void deleteNote(Note note) {
+        subjects.remove(note.getSubject());
+        contents.remove(note.getContent());
+        refreshList();
     }
 
     //    http://stackoverflow.com/questions/14292398/how-to-pass-data-from-2nd-activity-to-1st-activity-when-pressed-back-android
@@ -135,7 +137,6 @@ public class ListOfNotes extends AppCompatActivity {
                 break;
             }
         }
-
         subjects.set(pos, note.getSubject());
         contents.set(pos, note.getContent());
 

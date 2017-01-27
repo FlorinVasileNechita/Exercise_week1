@@ -15,12 +15,12 @@
         android:text="Delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/noteSubjectTextView"
         android:layout_toRightOf="@+id/noteSubjectTextView"
-        android:layout_toEndOf="@+id/noteSubjectTextView"
         android:layout_marginLeft="126dp"
         android:layout_marginStart="126dp"
-        android:id="@+id/DeleteTextView" />
+        android:id="@+id/DeleteTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/noteSubjectTextView" />
 
 
 </RelativeLayout>

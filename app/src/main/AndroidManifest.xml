@@ -11,7 +11,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         >
         <!--android:theme="@style/AppTheme"-->
-        <activity android:name=".ListOfNotes">
+        <!--<activity android:name=".ListOfNotes">-->
+        <activity android:name=".LeftDrawer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddNote"></activity>
+        <activity android:name=".ListOfNotes"></activity>
     </application>
 
 </manifest>

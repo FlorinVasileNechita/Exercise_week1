@@ -48,8 +48,9 @@ public class LeftDrawer extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 Toast.makeText(view.getContext(), menu[position], Toast.LENGTH_SHORT).show();
                 if(menu[position].equals("Notes list")){
-                    Intent i = new Intent(LeftDrawer.this, ListOfNotes.class);
-                    startActivity(i);
+//                    TODO: change to load the proper fragments
+//                    Intent i = new Intent(LeftDrawer.this, ListOfNotes.class);
+//                    startActivity(i);
                 }
             }
         });

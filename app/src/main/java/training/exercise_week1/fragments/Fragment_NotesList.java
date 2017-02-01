@@ -1,5 +1,6 @@
 package training.exercise_week1.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import training.exercise_week1.AddNote;
 import training.exercise_week1.CustomAdapter;
+import training.exercise_week1.LeftDrawer;
 import training.exercise_week1.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
@@ -57,8 +58,17 @@ public class Fragment_NotesList extends Fragment {
 
         handleAddNoteButton(view);
 
-
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try{
+            listenerFragment_notesList = (ListenerFragment_NotesList) activity;
+        }catch (Exception e){
+            throw new ClassCastException(e.toString());
+        }
     }
 
     private void handleListView(View view) {
@@ -97,7 +107,9 @@ public class Fragment_NotesList extends Fragment {
         addNoteButton_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToAddNoteActivity(null);
+//                goToAddNoteActivity(null);
+//                controllerFragment_notesList.addNote(null);
+                listenerFragment_notesList.addNote();
             }
         });
     }
@@ -112,20 +124,13 @@ public class Fragment_NotesList extends Fragment {
     }
 
     public void itemClicked(Note note) {
-        goToAddNoteActivity(note);
+        listenerFragment_notesList.updateNote(note);
     }
 
     private void deleteNote(Note note) {
         subjects.remove(note.getSubject());
         contents.remove(note.getContent());
         refreshList();
-    }
-
-    private void goToAddNoteActivity(Note note) {
-//        Intent i = new Intent(this, AddNote.class);
-        Intent i = new Intent(this.getContext(), AddNote.class);
-        i.putExtra("Note", note);
-        startActivityForResult(i, 1);
     }
 
     public void addElementInList(String noteSubject, String noteContent) {
@@ -147,7 +152,6 @@ public class Fragment_NotesList extends Fragment {
         contents.set(pos, note.getContent());
 
         refreshList();
-
     }
 
     private void refreshList() {
@@ -170,4 +174,18 @@ public class Fragment_NotesList extends Fragment {
             }
         }
     }
+
+
+    ListenerFragment_NotesList listenerFragment_notesList;
+
+    public interface ListenerFragment_NotesList{
+
+        public void addNote();
+
+        public void updateNote(Note note);
+
+    }
+
+
+
 }

@@ -37,12 +37,12 @@ public class LeftDrawer extends AppCompatActivity implements Fragment_NotesList.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_left_drawer);
+//        setContentView(R.layout.layout_left_drawer);
 
         menu = new String[]{"Notes list", "New note", "About"};
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerListView = (ListView) findViewById(R.id.left_drawer);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawerListView = (ListView) findViewById(R.id.left_drawer);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);
 
@@ -84,25 +84,25 @@ public class LeftDrawer extends AppCompatActivity implements Fragment_NotesList.
 
     private void changeFragment(Fragment fragmentName) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.content_frame, fragmentName);
-        fragmentTransaction.replace(R.id.fragment, fragmentName);
+
+//        fragmentTransaction.replace(R.id.fragment, fragmentName);
         fragmentTransaction.setTransition(TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
         fragmentTransaction.addToBackStack(null);
+
+        getSupportFragmentManager().executePendingTransactions();
     }
 
-
-    @Override
     public void addNote() {
         menu_NewNoteButtonClicked();
     }
 
-    @Override
     public void updateNote(Note note) {
         menu_NewNoteButtonClicked();
         Log.d("Tag","Updating note");
-        Fragment_AddNote fragment_addNote = (Fragment_AddNote) getSupportFragmentManager().findFragmentById(R.id.fragment);
-//        Fragment_AddNote fragment_addNote = (Fragment_AddNote) getSupportFragmentManager().findFragmentByTag("Fragment_AddNote");
-        fragment_addNote.setFields(note);
+
+//        Fragment_AddNote fragment_addNote = (Fragment_AddNote) getSupportFragmentManager().findFragmentById(R.id.fragment);
+//        fragment_addNote.setFields(note);
+//        fragment_addNote.setArguments(); -> to do
     }
 }

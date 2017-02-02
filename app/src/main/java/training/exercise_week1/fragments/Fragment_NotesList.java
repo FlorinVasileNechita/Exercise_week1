@@ -63,7 +63,9 @@ public class Fragment_NotesList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
+
         super.onAttach(activity);
+
         try{
             listenerFragment_notesList = (ListenerFragment_NotesList) activity;
         }catch (Exception e){
@@ -109,7 +111,7 @@ public class Fragment_NotesList extends Fragment {
             public void onClick(View v) {
 //                goToAddNoteActivity(null);
 //                controllerFragment_notesList.addNote(null);
-                listenerFragment_notesList.addNote();
+                listenerFragment_notesList.updateNote(null);
             }
         });
     }
@@ -180,9 +182,7 @@ public class Fragment_NotesList extends Fragment {
 
     public interface ListenerFragment_NotesList{
 
-        public void addNote();
-
-        public void updateNote(Note note);
+        void updateNote(Note note);
 
     }
 

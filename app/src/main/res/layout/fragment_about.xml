@@ -11,4 +11,9 @@
         android:id="@+id/textView"
         android:textSize="36sp"
         tools:textStyle="bold|italic" />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webView" />
 </LinearLayout>

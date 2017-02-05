@@ -1,5 +1,6 @@
 package training.exercise_week1.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import training.exercise_week1.Note;
@@ -25,8 +27,12 @@ public class Fragment_AddNote extends Fragment {
     private EditText subject_EditText;
     private EditText content_EditText;
 
+    private Button cancelButton, saveButton;
+
     private boolean update = false;
     private Note oldNote;
+
+    InterfaceAddNote interfaceAddNote;
 
     @Nullable
     @Override
@@ -36,43 +42,41 @@ public class Fragment_AddNote extends Fragment {
         subject_EditText = (EditText) view.findViewById(R.id.subject_EditText);
         content_EditText = (EditText) view.findViewById(R.id.content_EditText);
 
-//        try {
-//            Intent data = getIntent();
-//            oldNote = (Note) data.getSerializableExtra("Note");
-//            subject_EditText.setText(oldNote.getSubject());
-//            content_EditText.setText(oldNote.getContent());
-//            update = true;
-//            Log.d("Note", "Note=" + oldNote.getSubject() + " " + oldNote.getContent());
-//        } catch (Exception e) {
-//        }
+        cancelButton = (Button) view.findViewById(R.id.cancel_Button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfaceAddNote.newNoteButtonClicked(null);
+            }
+        });
+
+        saveButton = (Button) view.findViewById(R.id.save_Button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!(getSubject() == null || getContent() == null)) {
+                    interfaceAddNote.newNoteButtonClicked(new Note(getSubject(), getContent()));
+                }
+            }
+        });
 
 
         return view;
     }
 
-    public void setFields(Note note){
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            interfaceAddNote = (InterfaceAddNote) activity;
+        } catch (Exception e) {
+            throw new ClassCastException(e.toString());
+        }
+    }
+
+    public void setFields(Note note) {
         subject_EditText.setText(note.getSubject());
         content_EditText.setText(note.getContent());
-    }
-
-    public void cancelButtonClicked(View view) {
-//        Intent i = new Intent();
-//        setResult(RESULT_CANCELED, i);
-//        finish();
-    }
-
-    public void saveButtonClicked(View view) {
-//        if (!(getSubject() == null || getContent() == null)) {
-//            Intent i = new Intent();
-//            i.putExtra("Note", new Note(getSubject(), getContent()));
-//            if (!update) {
-//                setResult(RESULT_OK, i);
-//            } else {
-//                i.putExtra("OldNote", oldNote);
-//                setResult(RESULT_FIRST_USER, i);
-//            }
-//            finish();
-//        }
     }
 
     private String getSubject() {
@@ -93,5 +97,8 @@ public class Fragment_AddNote extends Fragment {
         return null;
     }
 
+    public interface InterfaceAddNote {
+        void newNoteButtonClicked(Note note);
+    }
 
 }

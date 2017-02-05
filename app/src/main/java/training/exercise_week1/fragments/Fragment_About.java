@@ -22,7 +22,6 @@ public class Fragment_About extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-        Log.d("TAG", "1233333333333");
 
         WebView webView = (WebView) view.findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());

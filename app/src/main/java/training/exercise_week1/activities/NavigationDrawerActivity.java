@@ -22,7 +22,7 @@ import training.exercise_week1.fragments.Fragment_NotesList;
  * Created by florinnechita on 02/02/17.
  */
 
-public class NavigationDrawerActivity extends AppCompatActivity implements Fragment_NotesList.ListenerFragment_NotesList {
+public class NavigationDrawerActivity extends AppCompatActivity implements Fragment_NotesList.ListenerFragment_NotesList, Fragment_AddNote.InterfaceAddNote {
 
     String[] navigationDrawerMenuItems;
 
@@ -74,9 +74,18 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Fragm
             replaceFragment(new Fragment_AddNote());
             Fragment_AddNote fragment_addNote = (Fragment_AddNote) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
             fragment_addNote.setFields(note);
-//            TOOD: fragment_addNote.setArguments()
+//            TODO: fragment_addNote.setArguments()
         } else {
             replaceFragment(new Fragment_AddNote());
+        }
+    }
+
+    @Override
+    public void newNoteButtonClicked(Note note) {
+        replaceFragment(new Fragment_NotesList());
+        if (note != null) {
+            Fragment_NotesList fragment_notesList = (Fragment_NotesList) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
+            fragment_notesList.addElementInList(note.getSubject(), note.getContent());
         }
     }
 }

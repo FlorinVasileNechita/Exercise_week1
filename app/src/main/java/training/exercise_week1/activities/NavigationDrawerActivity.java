@@ -62,6 +62,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Fragm
     }
 
     private void replaceFragment(Fragment fragment, Bundle args) {
+        fragment.setArguments(args);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.navigation_drawer_content, fragment);
         fragmentTransaction.commitNow();

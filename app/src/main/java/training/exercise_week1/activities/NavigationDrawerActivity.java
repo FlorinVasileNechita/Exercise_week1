@@ -2,9 +2,9 @@ package training.exercise_week1.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,46 +43,44 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Fragm
 
         navigationDrawerMenu.setAdapter(navigationDrawerMenuAdapter);
         navigationDrawerMenu.setSelector(android.R.color.holo_green_dark);
-        navigationDrawerLayout.openDrawer(GravityCompat.START);
+//        navigationDrawerLayout.openDrawer(GravityCompat.START);
 
+        replaceFragment(new Fragment_NotesList(), null);
         navigationDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 navigationDrawerLayout.closeDrawers();
                 if (position == 0) {
-                    replaceFragment(new Fragment_NotesList());
+                    replaceFragment(new Fragment_NotesList(), null);
                 } else if (position == 1) {
-                    replaceFragment(new Fragment_AddNote());
+                    replaceFragment(new Fragment_AddNote(), null);
                 } else if (position == 2) {
-                    replaceFragment(new Fragment_About());
+                    replaceFragment(new Fragment_About(), null);
                 }
             }
         });
-
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, Bundle args) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.navigation_drawer_content, fragment);
         fragmentTransaction.commitNow();
     }
 
-
     @Override
     public void updateNote(Note note) {
         if (note != null) {
-            replaceFragment(new Fragment_AddNote());
-            Fragment_AddNote fragment_addNote = (Fragment_AddNote) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
-            fragment_addNote.setFields(note);
-//            TODO: fragment_addNote.setArguments()
+            Bundle args = new Bundle();
+            args.putSerializable("Note", note);
+            replaceFragment(new Fragment_AddNote(), args);
         } else {
-            replaceFragment(new Fragment_AddNote());
+            replaceFragment(new Fragment_AddNote(), null);
         }
     }
 
     @Override
     public void newNoteButtonClicked(Note note) {
-        replaceFragment(new Fragment_NotesList());
+        replaceFragment(new Fragment_NotesList(), null);
         if (note != null) {
             Fragment_NotesList fragment_notesList = (Fragment_NotesList) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
             fragment_notesList.addElementInList(note.getSubject(), note.getContent());

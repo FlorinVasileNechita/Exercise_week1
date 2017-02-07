@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 import training.exercise_week1.DAO.NotesDataSource;
 import training.exercise_week1.Note;
 import training.exercise_week1.R;
@@ -55,8 +57,8 @@ public class Fragment_AddNote extends Fragment {
             @Override
             public void onClick(View v) {
                 String str = sf.getCurrentDateAndTime();
-                Note n = new Note("S="+str,"C="+str);
-                notesDataSource  = new NotesDataSource(getContext());
+                Note n = new Note("S=" + str, "C=" + str);
+                notesDataSource = new NotesDataSource(getContext());
                 notesDataSource.createNote(n);
             }
         });
@@ -66,7 +68,10 @@ public class Fragment_AddNote extends Fragment {
             @Override
             public void onClick(View v) {
                 notesDataSource = new NotesDataSource(getContext());
-                notesDataSource.printDB();
+                ArrayList<Note> notes = notesDataSource.getAllNotes();
+                for (Note n : notes) {
+                    Log.d("DB_LIST", n.getId() + " " + n.getSubject() + " " + n.getContent());
+                }
             }
         });
 

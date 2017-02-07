@@ -7,6 +7,9 @@ public class Note implements Serializable {
     private String subject;
     private String content;
 
+    public Note() {
+    }
+
     public Note(String subject, String content) {
         this.subject = subject;
         this.content = content;

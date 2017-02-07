@@ -48,5 +48,23 @@
         android:layout_alignParentRight="true"
         android:text="@string/save" />
 
+    <Button
+        android:text="dbTester"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/content_EditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="89dp"
+        android:id="@+id/dbTester" />
+
+    <Button
+        android:text="dbPrint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dbTester"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:id="@+id/dbPrint" />
+
 
 </RelativeLayout>

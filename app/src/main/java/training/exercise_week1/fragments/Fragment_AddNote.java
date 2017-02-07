@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import training.exercise_week1.DAO.NotesDataSource;
 import training.exercise_week1.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
@@ -22,10 +23,11 @@ public class Fragment_AddNote extends Fragment {
     private EditText content_EditText;
 
     InterfaceAddNote interfaceAddNote;
+    NotesDataSource notesDataSource;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_note, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_note, container, false);
 
         subject_EditText = (EditText) view.findViewById(R.id.subject_EditText);
         content_EditText = (EditText) view.findViewById(R.id.content_EditText);
@@ -47,6 +49,27 @@ public class Fragment_AddNote extends Fragment {
                 }
             }
         });
+
+        Button dbTester = (Button) view.findViewById(R.id.dbTester);
+        dbTester.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = sf.getCurrentDateAndTime();
+                Note n = new Note("S="+str,"C="+str);
+                notesDataSource  = new NotesDataSource(getContext());
+                notesDataSource.createNote(n);
+            }
+        });
+
+        Button dbPrint = (Button) view.findViewById(R.id.dbPrint);
+        dbPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notesDataSource = new NotesDataSource(getContext());
+                notesDataSource.printDB();
+            }
+        });
+
 
         Bundle args = getArguments();
         if (args != null) {

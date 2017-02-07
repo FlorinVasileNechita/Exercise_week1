@@ -2,13 +2,28 @@ package training.exercise_week1;
 
 import java.io.Serializable;
 
-public class Note implements Serializable{
+public class Note implements Serializable {
+    private long id;
     private String subject;
     private String content;
 
     public Note(String subject, String content) {
         this.subject = subject;
         this.content = content;
+    }
+
+    public Note(long id, String subject, String content) {
+        this.id = id;
+        this.subject = subject;
+        this.content = content;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setSubject(String subject) {

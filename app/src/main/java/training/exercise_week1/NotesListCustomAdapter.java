@@ -5,20 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * Created by usr on 2/8/2017.
+ */
 
-public class CustomAdapter extends ArrayAdapter<String> {
+public class NotesListCustomAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final ArrayList<String> values;
 
 
-    public CustomAdapter(Context context, ArrayList<String> values) {
+    public NotesListCustomAdapter(Context context, ArrayList<String> values) {
         super(context, R.layout.listview_custom_row, values);
         this.context = context;
         this.values = values;
@@ -40,4 +40,3 @@ public class CustomAdapter extends ArrayAdapter<String> {
     }
 
 }
-

@@ -1,9 +1,7 @@
 package training.exercise_week1.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +14,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import training.exercise_week1.CustomAdapter;
-import training.exercise_week1.LeftDrawer;
-import training.exercise_week1.Note;
+import training.exercise_week1.NotesListCustomAdapter;
+import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
 
-import static android.app.Activity.RESULT_FIRST_USER;
-import static android.app.Activity.RESULT_OK;
-
-/**
- * Created by zbarciog on 01/02/17.
- */
-
-public class Fragment_NotesList extends Fragment {
+public class NotesListFragment extends Fragment {
 
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> contents = new ArrayList<>();
@@ -45,10 +35,17 @@ public class Fragment_NotesList extends Fragment {
     private Button addDateAndTime_Button;
     private Button addNoteButton_Button;
 
-    @Nullable
+
+    NotesListFragmentListener notesListFragmentListener;
+
+    public interface NotesListFragmentListener {
+        void updateNote(Note note);
+    }
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
         handleListView(view);
 
@@ -63,18 +60,16 @@ public class Fragment_NotesList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-
         super.onAttach(activity);
-
-        try{
-            listenerFragment_notesList = (ListenerFragment_NotesList) activity;
-        }catch (Exception e){
+        try {
+            notesListFragmentListener = (NotesListFragmentListener) activity;
+        } catch (Exception e) {
             throw new ClassCastException(e.toString());
         }
     }
 
     private void handleListView(View view) {
-        adapter = new CustomAdapter(view.getContext(), subjects);
+        adapter = new NotesListCustomAdapter(view.getContext(), subjects);
         listView = (ListView) view.findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
@@ -104,14 +99,12 @@ public class Fragment_NotesList extends Fragment {
         });
     }
 
-    private void handleAddNoteButton(View view){
+    private void handleAddNoteButton(View view) {
         addNoteButton_Button = (Button) view.findViewById(R.id.addNoteButton);
         addNoteButton_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                goToAddNoteActivity(null);
-//                controllerFragment_notesList.addNote(null);
-                listenerFragment_notesList.updateNote(null);
+                notesListFragmentListener.updateNote(null);
             }
         });
     }
@@ -126,7 +119,7 @@ public class Fragment_NotesList extends Fragment {
     }
 
     public void itemClicked(Note note) {
-        listenerFragment_notesList.updateNote(note);
+        notesListFragmentListener.updateNote(note);
     }
 
     private void deleteNote(Note note) {
@@ -136,7 +129,6 @@ public class Fragment_NotesList extends Fragment {
     }
 
     public void addElementInList(String noteSubject, String noteContent) {
-//        listItems.add(0, new Note(noteSubject, noteContent));
         subjects.add(0, noteSubject);
         contents.add(0, noteContent);
         refreshList();
@@ -160,32 +152,5 @@ public class Fragment_NotesList extends Fragment {
         listView.setAdapter(null);
         listView.setAdapter(adapter);
     }
-
-    //    http://stackoverflow.com/questions/14292398/how-to-pass-data-from-2nd-activity-to-1st-activity-when-pressed-back-android
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Note note = (Note) data.getSerializableExtra("Note");
-                addElementInList(note.getSubject(), note.getContent());
-            }
-            if (resultCode == RESULT_FIRST_USER) {
-                Note note = (Note) data.getSerializableExtra("Note");
-                Note oldNote = (Note) data.getSerializableExtra("OldNote");
-                updateElementInList(note, oldNote);
-            }
-        }
-    }
-
-
-    ListenerFragment_NotesList listenerFragment_notesList;
-
-    public interface ListenerFragment_NotesList{
-
-        void updateNote(Note note);
-
-    }
-
-
 
 }

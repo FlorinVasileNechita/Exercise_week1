@@ -1,4 +1,4 @@
-package training.exercise_week1;
+package training.exercise_week1.model;
 
 import java.io.Serializable;
 

@@ -20,7 +20,7 @@ public class SomeFunctions {
     }
 
     public String getCurrentDateAndTime(){
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
         Date date = new Date();
         return dateFormat.format(date);
     }

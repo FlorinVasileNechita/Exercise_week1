@@ -12,17 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import training.exercise_week1.Note;
+import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
-import training.exercise_week1.fragments.Fragment_About;
-import training.exercise_week1.fragments.Fragment_AddNote;
-import training.exercise_week1.fragments.Fragment_NotesList;
+import training.exercise_week1.fragments.AboutFragment;
+import training.exercise_week1.fragments.EditNoteFragment;
+import training.exercise_week1.fragments.NotesListFragment;
 
-/**
- * Created by florinnechita on 02/02/17.
- */
-
-public class NavigationDrawerActivity extends AppCompatActivity implements Fragment_NotesList.ListenerFragment_NotesList, Fragment_AddNote.InterfaceAddNote {
+public class NavigationDrawerActivity extends AppCompatActivity implements NotesListFragment.NotesListFragmentListener, EditNoteFragment.EditNoteFragmentListener {
 
     String[] navigationDrawerMenuItems;
 
@@ -45,17 +41,17 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Fragm
         navigationDrawerMenu.setSelector(android.R.color.holo_green_dark);
 //        navigationDrawerLayout.openDrawer(GravityCompat.START);
 
-        replaceFragment(new Fragment_NotesList(), null);
+        replaceFragment(new NotesListFragment(), null);
         navigationDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 navigationDrawerLayout.closeDrawers();
                 if (position == 0) {
-                    replaceFragment(new Fragment_NotesList(), null);
+                    replaceFragment(new NotesListFragment(), null);
                 } else if (position == 1) {
-                    replaceFragment(new Fragment_AddNote(), null);
+                    replaceFragment(new EditNoteFragment(), null);
                 } else if (position == 2) {
-                    replaceFragment(new Fragment_About(), null);
+                    replaceFragment(new AboutFragment(), null);
                 }
             }
         });
@@ -73,18 +69,18 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Fragm
         if (note != null) {
             Bundle args = new Bundle();
             args.putSerializable("Note", note);
-            replaceFragment(new Fragment_AddNote(), args);
+            replaceFragment(new EditNoteFragment(), args);
         } else {
-            replaceFragment(new Fragment_AddNote(), null);
+            replaceFragment(new EditNoteFragment(), null);
         }
     }
 
     @Override
     public void newNoteButtonClicked(Note note) {
-        replaceFragment(new Fragment_NotesList(), null);
+        replaceFragment(new NotesListFragment(), null);
         if (note != null) {
-            Fragment_NotesList fragment_notesList = (Fragment_NotesList) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
-            fragment_notesList.addElementInList(note.getSubject(), note.getContent());
+            NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
+            notesListFragment.addElementInList(note.getSubject(), note.getContent());
         }
     }
 }

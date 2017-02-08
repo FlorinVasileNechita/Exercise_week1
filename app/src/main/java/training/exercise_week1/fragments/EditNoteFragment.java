@@ -12,20 +12,26 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-import training.exercise_week1.DAO.NotesDataSource;
-import training.exercise_week1.Note;
+import training.exercise_week1.DAO.NotesDb;
+import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
 
-public class Fragment_AddNote extends Fragment {
+public class EditNoteFragment extends Fragment{
 
     private SomeFunctions sf = new SomeFunctions();
 
     private EditText subject_EditText;
     private EditText content_EditText;
 
-    InterfaceAddNote interfaceAddNote;
-    NotesDataSource notesDataSource;
+    NotesDb notesDb;
+
+    EditNoteFragmentListener editNoteFragmentListener;
+    public interface EditNoteFragmentListener {
+        void newNoteButtonClicked(Note note);
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +44,7 @@ public class Fragment_AddNote extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                interfaceAddNote.newNoteButtonClicked(null);
+                editNoteFragmentListener.newNoteButtonClicked(null);
             }
         });
 
@@ -47,7 +53,7 @@ public class Fragment_AddNote extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!(getSubject() == null || getContent() == null)) {
-                    interfaceAddNote.newNoteButtonClicked(new Note(getSubject(), getContent()));
+                    editNoteFragmentListener.newNoteButtonClicked(new Note(getSubject(), getContent()));
                 }
             }
         });
@@ -56,10 +62,17 @@ public class Fragment_AddNote extends Fragment {
         dbTester.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = sf.getCurrentDateAndTime();
-                Note n = new Note("S=" + str, "C=" + str);
-                notesDataSource = new NotesDataSource(getContext());
-                notesDataSource.createNote(n);
+                Note newNote;
+                notesDb = new NotesDb(getContext());
+                if (!(getSubject() == null || getContent() == null)) {
+                    newNote = new Note(getSubject(), getContent());
+                } else {
+                    String str = sf.getCurrentDateAndTime();
+                    newNote = new Note("S=" + str, "C=" + str);
+                    sf.showToastMessage(getContext(), "Insert data", false);
+                }
+                notesDb.createNote(newNote);
+
             }
         });
 
@@ -67,8 +80,8 @@ public class Fragment_AddNote extends Fragment {
         dbPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notesDataSource = new NotesDataSource(getContext());
-                ArrayList<Note> notes = notesDataSource.getAllNotes();
+                notesDb = new NotesDb(getContext());
+                ArrayList<Note> notes = notesDb.getAllNotes();
                 for (Note n : notes) {
                     Log.d("DB_LIST", n.getId() + " " + n.getSubject() + " " + n.getContent());
                 }
@@ -90,7 +103,7 @@ public class Fragment_AddNote extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            interfaceAddNote = (InterfaceAddNote) activity;
+            editNoteFragmentListener = (EditNoteFragmentListener) activity;
         } catch (Exception e) {
             throw new ClassCastException(e.toString());
         }
@@ -112,10 +125,6 @@ public class Fragment_AddNote extends Fragment {
             return content_EditText.getText().toString();
         }
         return null;
-    }
-
-    public interface InterfaceAddNote {
-        void newNoteButtonClicked(Note note);
     }
 
 }

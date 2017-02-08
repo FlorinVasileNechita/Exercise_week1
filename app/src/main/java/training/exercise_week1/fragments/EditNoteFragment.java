@@ -10,28 +10,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
-import training.exercise_week1.DAO.NotesDb;
 import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
 
-public class EditNoteFragment extends Fragment{
+public class EditNoteFragment extends Fragment {
 
     private SomeFunctions sf = new SomeFunctions();
 
     private EditText subject_EditText;
     private EditText content_EditText;
 
-    NotesDb notesDb;
-
     EditNoteFragmentListener editNoteFragmentListener;
+
     public interface EditNoteFragmentListener {
         void newNoteButtonClicked(Note note);
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,37 +51,6 @@ public class EditNoteFragment extends Fragment{
                 }
             }
         });
-
-        Button dbTester = (Button) view.findViewById(R.id.dbTester);
-        dbTester.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Note newNote;
-                notesDb = new NotesDb(getContext());
-                if (!(getSubject() == null || getContent() == null)) {
-                    newNote = new Note(getSubject(), getContent());
-                } else {
-                    String str = sf.getCurrentDateAndTime();
-                    newNote = new Note("S=" + str, "C=" + str);
-                    sf.showToastMessage(getContext(), "Insert data", false);
-                }
-                notesDb.createNote(newNote);
-
-            }
-        });
-
-        Button dbPrint = (Button) view.findViewById(R.id.dbPrint);
-        dbPrint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notesDb = new NotesDb(getContext());
-                ArrayList<Note> notes = notesDb.getAllNotes();
-                for (Note n : notes) {
-                    Log.d("DB_LIST", n.getId() + " " + n.getSubject() + " " + n.getContent());
-                }
-            }
-        });
-
 
         Bundle args = getArguments();
         if (args != null) {

@@ -23,11 +23,11 @@ public class NotesDb {
         database = notesSqlLiteHelper.getWritableDatabase();
     }
 
-    public void closeDb() {
+    private void closeDb() {
         notesSqlLiteHelper.close();
     }
 
-    public Note createNote(Note note) {
+    public Note addNote(Note note) {
         ContentValues values = new ContentValues();
         values.put(NotesSqlLiteHelper.COLUMN_SUBJECT, note.getSubject());
         values.put(NotesSqlLiteHelper.COLUMN_CONTENT, note.getContent());
@@ -35,9 +35,7 @@ public class NotesDb {
         openDb();
         long insertId = database.insert(NotesSqlLiteHelper.TABLE_NOTES, null, values);
 
-        Cursor cursor = database.query(NotesSqlLiteHelper.TABLE_NOTES,
-                allColumns, NotesSqlLiteHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
+        Cursor cursor = database.query(NotesSqlLiteHelper.TABLE_NOTES, allColumns, NotesSqlLiteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
 
         cursor.moveToFirst();
         Note newNote = cursorToNote(cursor);
@@ -46,12 +44,16 @@ public class NotesDb {
         return newNote;
     }
 
-    public ArrayList<Note> getAllNotes() {
+    public ArrayList<Note> getNotesOrderById(boolean desc) {
         ArrayList<Note> notes = new ArrayList<>();
 
         openDb();
-        Cursor cursor = database.query(NotesSqlLiteHelper.TABLE_NOTES,
-                allColumns, null, null, null, null, null);
+        Cursor cursor;
+        if (desc) {
+            cursor = database.query(NotesSqlLiteHelper.TABLE_NOTES, allColumns, null, null, null, null, allColumns[0] + " DESC");
+        } else {
+            cursor = database.query(NotesSqlLiteHelper.TABLE_NOTES, allColumns, null, null, null, null, allColumns[0] + " ASC");
+        }
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -59,7 +61,7 @@ public class NotesDb {
             notes.add(note);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
+
         cursor.close();
         closeDb();
         return notes;

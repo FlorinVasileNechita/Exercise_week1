@@ -80,7 +80,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
         replaceFragment(new NotesListFragment(), null);
         if (note != null) {
             NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
-            notesListFragment.addElementInList(note.getSubject(), note.getContent());
+            notesListFragment.updateNote(note);
         }
     }
 }

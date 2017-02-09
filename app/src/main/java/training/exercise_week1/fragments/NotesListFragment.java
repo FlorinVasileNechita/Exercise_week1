@@ -3,6 +3,7 @@ package training.exercise_week1.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +32,6 @@ public class NotesListFragment extends Fragment {
 
     private boolean deleteActivated = false;
 
-    private TextView clickRowToDelete;
-
-    private Button addDateAndTimeButton;
-    private Button addNoteButton;
-    private Button deleteNotesButton;
-
     NotesDb notesDb;
 
     NotesListFragmentListener notesListFragmentListener;
@@ -45,21 +40,22 @@ public class NotesListFragment extends Fragment {
         void updateNote(Note note);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
         notesDb = new NotesDb(getContext());
-        notesArrayList = notesDb.getNotesOrderById(true);
 
-        handleListView(view);
+        listViewHandler(view);
+        refreshList();
 
-        handleAddDateAndTimeButton(view);
+        addDateAndTimeButtonHandler(view);
 
-        handleClickToDeleteTextView(view);
+        clickToDeleteTextViewHandler(view);
 
-        handleAddNoteButton(view);
+        addNoteButtonHandler(view);
+
+        deleteNoteButtonHandler(view);
 
         return view;
     }
@@ -74,11 +70,8 @@ public class NotesListFragment extends Fragment {
         }
     }
 
-    private void handleListView(View view) {
-        adapter = new NotesListCustomAdapter(view.getContext(), notesArrayList);
+    private void listViewHandler(View view) {
         listView = (ListView) view.findViewById(R.id.listView);
-        listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -87,26 +80,27 @@ public class NotesListFragment extends Fragment {
                         if (deleteActivated) {
                             deleteNote(note);
                         } else {
-                            itemClicked(note);
+                            notesListFragmentListener.updateNote(note);
                         }
                     }
                 }
         );
     }
 
-    private void handleAddDateAndTimeButton(View view) {
-        addDateAndTimeButton = (Button) view.findViewById(R.id.currentDate);
+    private void addDateAndTimeButtonHandler(View view) {
+        Button addDateAndTimeButton = (Button) view.findViewById(R.id.currentDate);
         addDateAndTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String str = sf.getCurrentDateAndTime();
-                addElementInList("S" + str, "C" + str);
+                addNote(new Note("S" + str, "C" + str));
             }
         });
     }
 
-    private void handleAddNoteButton(View view) {
-        addNoteButton = (Button) view.findViewById(R.id.addNoteButton);
+
+    private void addNoteButtonHandler(View view) {
+        Button addNoteButton = (Button) view.findViewById(R.id.addNoteButton);
         addNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,8 +109,21 @@ public class NotesListFragment extends Fragment {
         });
     }
 
-    private void handleClickToDeleteTextView(View view) {
-        clickRowToDelete = (TextView) view.findViewById(R.id.textView_clickToDelete);
+    private void deleteNoteButtonHandler(View view) {
+        Button deleteNotesButton = (Button) view.findViewById(R.id.deleteNotes);
+        deleteNotesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sf.showToastMessage(getContext(), "Delete_btn clicked", false);
+                deleteActivated = !deleteActivated;
+                clickToDeleteTextViewHandler(getView());
+            }
+        });
+    }
+
+    private void clickToDeleteTextViewHandler(View view) {
+        TextView clickRowToDelete = (TextView) view.findViewById(R.id.textView_clickToDelete);
+
         if (!deleteActivated) {
             clickRowToDelete.setVisibility(View.GONE);
         } else {
@@ -124,57 +131,27 @@ public class NotesListFragment extends Fragment {
         }
     }
 
-    private void handleDeleteButton(View view) {
-        deleteNotesButton = (Button) view.findViewById(R.id.deleteNotes);
-        deleteNotesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
-
-    public void itemClicked(Note note) {
-        notesListFragmentListener.updateNote(note);
-    }
-
     private void deleteNote(Note note) {
-//        TODO: implement delete
+        sf.showToastMessage(getContext(), "ToDelete= " + note.getSubject(), false);
+        notesDb.deleteNote(note);
         refreshList();
     }
 
-    public void addElementInList(String noteSubject, String noteContent) {
-        notesDb.addNote(new Note(noteSubject, noteContent));
+    public void addNote(Note note) {
+        notesDb.addNote(note);
         refreshList();
     }
 
-    public void updateElementInList(Note note, Note oldNote) {
-//        int pos = 0;
-//        for (int i = 0; i < subjects.size(); i++) {
-//            if (subjects.get(i).equals(oldNote.getSubject())) {
-//                pos = i;
-//                break;
-//            }
-//        }
-//        subjects.set(pos, note.getSubject());
-//        contents.set(pos, note.getContent());
-//
-//        refreshList();
-
-        int pos = 0;
-        for (int i = 0; i < notesArrayList.size(); i++) {
-            if (notesArrayList.get(i).equals(oldNote.getSubject())) {
-                pos = i;
-                break;
-            }
-        }
-        notesArrayList.set(pos, note);
-
+    public void updateNote(Note note) {
+        Log.v("TAG", "ToUpdate=" + note.getId() + " " + note.getSubject());
+        sf.showToastMessage(getContext(), "ToUpdate=" + note.getId() + " " + note.getSubject(), true);
+        notesDb.updateNote(note);
         refreshList();
     }
 
     private void refreshList() {
         notesArrayList = notesDb.getNotesOrderById(true);
+        adapter = new NotesListCustomAdapter(getContext(), notesArrayList);
         listView.setAdapter(null);
         listView.setAdapter(adapter);
     }

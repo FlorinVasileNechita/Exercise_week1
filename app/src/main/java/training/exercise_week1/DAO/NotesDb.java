@@ -67,6 +67,25 @@ public class NotesDb {
         return notes;
     }
 
+    public void deleteNote(Note note) {
+        openDb();
+        database.delete(NotesSqlLiteHelper.TABLE_NOTES, allColumns[0] + "=" + note.getId(), null);
+        closeDb();
+    }
+
+    public void updateNote(Note note) {
+        openDb();
+
+//        String updateQuery = "UPDATE "+ NotesSqlLiteHelper.TABLE_NOTES + " ";
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(allColumns[1], note.getSubject());
+        contentValues.put(allColumns[2], note.getContent());
+        database.update(NotesSqlLiteHelper.TABLE_NOTES, contentValues, allColumns[0] + "=" + note.getId(), null);
+
+        closeDb();
+    }
+
     private Note cursorToNote(Cursor cursor) {
         Note note = new Note();
         note.setId(cursor.getLong(0));

@@ -75,14 +75,10 @@ public class NotesDb {
 
     public void updateNote(Note note) {
         openDb();
-
-//        String updateQuery = "UPDATE "+ NotesSqlLiteHelper.TABLE_NOTES + " ";
-
         ContentValues contentValues = new ContentValues();
         contentValues.put(allColumns[1], note.getSubject());
         contentValues.put(allColumns[2], note.getContent());
         database.update(NotesSqlLiteHelper.TABLE_NOTES, contentValues, allColumns[0] + "=" + note.getId(), null);
-
         closeDb();
     }
 

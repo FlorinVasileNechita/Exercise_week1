@@ -21,10 +21,12 @@ public class EditNoteFragment extends Fragment {
     private EditText subject_EditText;
     private EditText content_EditText;
 
+    Note receivedNote = new Note();
+
     EditNoteFragmentListener editNoteFragmentListener;
 
     public interface EditNoteFragmentListener {
-        void newNoteButtonClicked(Note note);
+        void saveChanges(Note note);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class EditNoteFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editNoteFragmentListener.newNoteButtonClicked(null);
+                editNoteFragmentListener.saveChanges(null);
             }
         });
 
@@ -47,7 +49,9 @@ public class EditNoteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!(getSubject() == null || getContent() == null)) {
-                    editNoteFragmentListener.newNoteButtonClicked(new Note(getSubject(), getContent()));
+                    receivedNote.setSubject(getSubject());
+                    receivedNote.setContent(getSubject());
+                    editNoteFragmentListener.saveChanges(receivedNote);
                 }
             }
         });
@@ -55,9 +59,9 @@ public class EditNoteFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             Log.d("LOG", "savedInstanceState is NOT null");
-            Note note = (Note) args.getSerializable("Note");
-            subject_EditText.setText(note.getSubject());
-            content_EditText.setText(note.getContent());
+            receivedNote = (Note) args.getSerializable("Note");
+            subject_EditText.setText(receivedNote.getSubject());
+            content_EditText.setText(receivedNote.getContent());
         }
         return view;
     }

@@ -39,7 +39,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
 
         navigationDrawerMenu.setAdapter(navigationDrawerMenuAdapter);
         navigationDrawerMenu.setSelector(android.R.color.holo_green_dark);
-//        navigationDrawerLayout.openDrawer(GravityCompat.START);
 
         replaceFragment(new NotesListFragment(), null);
         navigationDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,8 +65,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
 
     @Override
     public void updateNote(Note note) {
+        Bundle args = new Bundle();
         if (note != null) {
-            Bundle args = new Bundle();
             args.putSerializable("Note", note);
             replaceFragment(new EditNoteFragment(), args);
         } else {
@@ -76,11 +75,15 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
     }
 
     @Override
-    public void newNoteButtonClicked(Note note) {
+    public void saveChanges(Note note) {
         replaceFragment(new NotesListFragment(), null);
         if (note != null) {
             NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_content);
-            notesListFragment.updateNote(note);
+            if (note.getId() > 0) {
+                notesListFragment.updateNote(note);
+            } else {
+                notesListFragment.addNote(note);
+            }
         }
     }
 }

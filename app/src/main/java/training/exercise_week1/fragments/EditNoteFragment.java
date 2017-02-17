@@ -50,7 +50,7 @@ public class EditNoteFragment extends Fragment {
             public void onClick(View v) {
                 if (!(getSubject() == null || getContent() == null)) {
                     receivedNote.setSubject(getSubject());
-                    receivedNote.setContent(getSubject());
+                    receivedNote.setContent(getContent());
                     editNoteFragmentListener.saveChanges(receivedNote);
                 }
             }

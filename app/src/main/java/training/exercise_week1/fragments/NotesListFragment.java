@@ -1,8 +1,12 @@
 package training.exercise_week1.fragments;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +19,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import training.exercise_week1.DAO.NotesDb;
 import training.exercise_week1.NotesListCustomAdapter;
+import training.exercise_week1.contentProvider.NotesContentProvider;
+import training.exercise_week1.database.NotesTable;
 import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
 
-public class NotesListFragment extends Fragment {
+public class NotesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ArrayList<Note> notesArrayList = new ArrayList<>();
 
@@ -35,6 +40,23 @@ public class NotesListFragment extends Fragment {
 //    NotesDb notesDb;
 
     NotesListFragmentListener notesListFragmentListener;
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {NotesTable.COLUMN_ID, NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
+        CursorLoader cursorLoader = new CursorLoader(getContext(), NotesContentProvider.CONTENT_URI, projection, null, null, null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 
     public interface NotesListFragmentListener {
         void updateNote(Note note);
@@ -138,21 +160,21 @@ public class NotesListFragment extends Fragment {
     }
 
     public void addNote(Note note) {
-        notesDb.addNote(note);
-        refreshList();
+//        notesDb.addNote(note);
+//        refreshList();
     }
 
     public void updateNote(Note note) {
         Log.v("TAG", "ToUpdate=" + note.getId() + " " + note.getSubject());
         sf.showToastMessage(getContext(), "ToUpdate=" + note.getId() + " " + note.getSubject(), true);
-        notesDb.updateNote(note);
-        refreshList();
+//        notesDb.updateNote(note);
+//        refreshList();
     }
 
     private void refreshList() {
-        notesArrayList = notesDb.getNotesOrderById(true);
-        adapter = new NotesListCustomAdapter(getContext(), notesArrayList);
-        listView.setAdapter(null);
-        listView.setAdapter(adapter);
+//        notesArrayList = notesDb.getNotesOrderById(true);
+//        adapter = new NotesListCustomAdapter(getContext(), notesArrayList);
+//        listView.setAdapter(null);
+//        listView.setAdapter(adapter);
     }
 }

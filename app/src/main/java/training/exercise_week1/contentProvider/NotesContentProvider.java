@@ -3,6 +3,7 @@ package training.exercise_week1.contentProvider;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -18,19 +19,27 @@ public class NotesContentProvider extends ContentProvider {
     private NotesDatabaseHelper notesDatabaseHelper;
 
     private static final int NOTES = 10;
-    private static final int NOTES_ID = 20;
+    private static final int NOTE_ID = 20;
 
     private static final String AUTHORITY = "training.exercise_week1.contentProvider";
 
     private static final String BASE_PATH = "notes";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 
-    public static final String CONNTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/notes";
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/notes";
     public static final String CONTENT_ITEM_BASE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "note";
+
+    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    static {
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH, NOTES);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", NOTE_ID);
+    }
 
 
     @Override
     public boolean onCreate() {
+        notesDatabaseHelper = new NotesDatabaseHelper(getContext());
         return false;
     }
 

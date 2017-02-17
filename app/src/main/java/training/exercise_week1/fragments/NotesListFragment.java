@@ -32,7 +32,7 @@ public class NotesListFragment extends Fragment {
 
     private boolean deleteActivated = false;
 
-    NotesDb notesDb;
+//    NotesDb notesDb;
 
     NotesListFragmentListener notesListFragmentListener;
 
@@ -44,7 +44,7 @@ public class NotesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
-        notesDb = new NotesDb(getContext());
+//        notesDb = new NotesDb(getContext());
 
         listViewHandler(view);
         refreshList();
@@ -133,8 +133,8 @@ public class NotesListFragment extends Fragment {
 
     private void deleteNote(Note note) {
         sf.showToastMessage(getContext(), "ToDelete= " + note.getSubject(), false);
-        notesDb.deleteNote(note);
-        refreshList();
+//        notesDb.deleteNote(note);
+//        refreshList();
     }
 
     public void addNote(Note note) {

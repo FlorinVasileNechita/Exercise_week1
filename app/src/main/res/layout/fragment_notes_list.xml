@@ -7,7 +7,7 @@
     android:id="@+id/activity_list_of_notes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="training.exercise_week1.ListOfNotes">
+    >
 
     <include
         android:id="@+id/toolbar_list_of_notes"

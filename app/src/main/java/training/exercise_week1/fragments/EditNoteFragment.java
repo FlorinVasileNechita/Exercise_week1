@@ -36,6 +36,14 @@ public class EditNoteFragment extends Fragment {
         subject_EditText = (EditText) view.findViewById(R.id.subject_EditText);
         content_EditText = (EditText) view.findViewById(R.id.content_EditText);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            Log.d("LOG", "savedInstanceState is NOT null");
+            receivedNote = (Note) args.getSerializable("Note");
+            subject_EditText.setText(receivedNote.getSubject());
+            content_EditText.setText(receivedNote.getContent());
+        }
+
         Button cancelButton = (Button) view.findViewById(R.id.cancel_Button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,19 +58,12 @@ public class EditNoteFragment extends Fragment {
             public void onClick(View v) {
                 if (!(getSubject() == null || getContent() == null)) {
                     receivedNote.setSubject(getSubject());
-                    receivedNote.setContent(getSubject());
+                    receivedNote.setContent(getContent());
                     editNoteFragmentListener.saveChanges(receivedNote);
                 }
             }
         });
 
-        Bundle args = getArguments();
-        if (args != null) {
-            Log.d("LOG", "savedInstanceState is NOT null");
-            receivedNote = (Note) args.getSerializable("Note");
-            subject_EditText.setText(receivedNote.getSubject());
-            content_EditText.setText(receivedNote.getContent());
-        }
         return view;
     }
 

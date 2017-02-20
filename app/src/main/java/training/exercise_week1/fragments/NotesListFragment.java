@@ -1,6 +1,8 @@
 package training.exercise_week1.fragments;
 
 import android.app.Activity;
+import android.content.ContentProvider;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,12 +23,18 @@ import java.util.ArrayList;
 
 import training.exercise_week1.NotesListCustomAdapter;
 import training.exercise_week1.contentProvider.NotesContentProvider;
+import training.exercise_week1.database.NotesDatabaseHelper;
 import training.exercise_week1.database.NotesTable;
 import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.SomeFunctions;
 
+//public class NotesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 public class NotesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+//    TODO: this should extend the ContentProvider
+
+
+    String[] projection = {NotesTable.COLUMN_ID, NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
 
     private ArrayList<Note> notesArrayList = new ArrayList<>();
 
@@ -41,23 +49,6 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
 
     NotesListFragmentListener notesListFragmentListener;
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {NotesTable.COLUMN_ID, NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
-        CursorLoader cursorLoader = new CursorLoader(getContext(), NotesContentProvider.CONTENT_URI, projection, null, null, null);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
     public interface NotesListFragmentListener {
         void updateNote(Note note);
     }
@@ -67,6 +58,8 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
 //        notesDb = new NotesDb(getContext());
+
+        getLoaderManager().initLoader(0, null, this);
 
         listViewHandler(view);
         refreshList();
@@ -90,6 +83,34 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
         } catch (Exception e) {
             throw new ClassCastException(e.toString());
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getContext(), NotesContentProvider.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor != null && cursor.getCount() > 0) {
+            notesArrayList = new ArrayList<>();
+            Note receivedNote;
+            Log.v(NotesListFragment.class.getName(), "_______NOTES TABLE_______");
+            while (cursor.moveToNext()) {
+                receivedNote = new Note(Long.parseLong(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
+                Log.v(NotesListFragment.class.getName(), receivedNote.getId() + " " + receivedNote.getSubject() + " " + receivedNote.getContent());
+                notesArrayList.add(receivedNote);
+            }
+            Log.v(NotesListFragment.class.getName(), "_________________________");
+        } else {
+            Log.v(NotesListFragment.class.getName(), "Something is wrong!");
+        }
+        refreshList();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     private void listViewHandler(View view) {
@@ -157,11 +178,33 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
         sf.showToastMessage(getContext(), "ToDelete= " + note.getSubject(), false);
 //        notesDb.deleteNote(note);
 //        refreshList();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NotesTable.COLUMN_ID, note.getId());
+
+//        this.getContext().getContentResolver().insert(NotesContentProvider.CONTENT_URI,contentValues);
+
+//        this.getContext().getContentResolver().delete(NotesContentProvider.CONTENT_URI, NotesTable.COLUMN_ID + "=" + contentValues, null);
+
+        NotesContentProvider notesContentProvider = new NotesContentProvider();
+        notesContentProvider.delete(NotesContentProvider.CONTENT_URI, NotesTable.COLUMN_ID + "=" + contentValues, null)
+        ;
+        refreshList();
+
+
     }
 
     public void addNote(Note note) {
 //        notesDb.addNote(note);
 //        refreshList();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NotesTable.COLUMN_SUBJECT, note.getSubject());
+        contentValues.put(NotesTable.COLUMN_CONTENT, note.getContent());
+
+        this.getContext().getContentResolver().insert(NotesContentProvider.CONTENT_URI, contentValues);
+
+        refreshList();
+
     }
 
     public void updateNote(Note note) {
@@ -173,8 +216,9 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
 
     private void refreshList() {
 //        notesArrayList = notesDb.getNotesOrderById(true);
-//        adapter = new NotesListCustomAdapter(getContext(), notesArrayList);
-//        listView.setAdapter(null);
-//        listView.setAdapter(adapter);
+
+        adapter = new NotesListCustomAdapter(getContext(), notesArrayList);
+        listView.setAdapter(null);
+        listView.setAdapter(adapter);
     }
 }

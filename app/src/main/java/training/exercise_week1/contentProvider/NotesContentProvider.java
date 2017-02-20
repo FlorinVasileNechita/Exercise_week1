@@ -161,7 +161,9 @@ public class NotesContentProvider extends ContentProvider {
     }
 
     private void checkNotesProjections(String[] projections) {
-        String[] available = {NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
+//        String[] available = {NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
+//        TODO: remove this if not working
+        String[] available = {NotesTable.COLUMN_ID,NotesTable.COLUMN_SUBJECT, NotesTable.COLUMN_CONTENT};
 
         if (projections != null) {
             HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projections));

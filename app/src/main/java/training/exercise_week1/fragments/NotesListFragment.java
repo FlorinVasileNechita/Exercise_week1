@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -182,13 +183,9 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
         ContentValues contentValues = new ContentValues();
         contentValues.put(NotesTable.COLUMN_ID, note.getId());
 
-//        this.getContext().getContentResolver().insert(NotesContentProvider.CONTENT_URI,contentValues);
+        Uri uri = Uri.parse(NotesContentProvider.CONTENT_URI + "/" + note.getId());
+        this.getActivity().getContentResolver().delete(uri, null, null);
 
-//        this.getContext().getContentResolver().delete(NotesContentProvider.CONTENT_URI, NotesTable.COLUMN_ID + "=" + contentValues, null);
-
-        NotesContentProvider notesContentProvider = new NotesContentProvider();
-        notesContentProvider.delete(NotesContentProvider.CONTENT_URI, NotesTable.COLUMN_ID + "=" + contentValues, null)
-        ;
         refreshList();
 
 

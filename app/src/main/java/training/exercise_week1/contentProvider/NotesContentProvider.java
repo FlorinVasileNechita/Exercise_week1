@@ -12,18 +12,12 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.w3c.dom.Text;
-
 import java.util.Arrays;
 import java.util.HashSet;
 
 import training.exercise_week1.database.NotesDatabaseHelper;
 import training.exercise_week1.database.NotesTable;
-import training.exercise_week1.model.Note;
 
-/**
- * Created by florinnechita on 16/02/17.
- */
 
 public class NotesContentProvider extends ContentProvider {
 

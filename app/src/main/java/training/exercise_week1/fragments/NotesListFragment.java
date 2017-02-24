@@ -2,6 +2,7 @@ package training.exercise_week1.fragments;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -105,6 +106,7 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
 
     private void listViewHandler(View view) {
         listView = (ListView) view.findViewById(R.id.listView);
+
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -118,6 +120,26 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
                     }
                 }
         );
+
+        listView.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        Note note = notesArrayList.get(position);
+                        sf.showToastMessage(view.getContext(), "LongClick: " + note.getId() + " " + note.getSubject(), false);
+
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, note.getId() + " " + note.getSubject() + " " + note.getContent());
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, note.getId() + " " + note.getSubject() + " " + note.getContent()));
+//                        startActivity(sendIntent);
+
+                        return true;
+                    }
+                }
+        );
+
     }
 
     private void addDateAndTimeButtonHandler(View view) {

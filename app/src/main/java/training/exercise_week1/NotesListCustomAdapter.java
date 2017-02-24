@@ -37,8 +37,6 @@ public class NotesListCustomAdapter extends ArrayAdapter<Note> {
 //        field to display in the ListView
         noteSubject.setText(notes.get(position).getSubject());
 
-        // Change icon based on name
-
         return rowView;
     }
 

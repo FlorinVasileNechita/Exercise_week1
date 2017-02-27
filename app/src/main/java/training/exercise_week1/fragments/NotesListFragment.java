@@ -127,14 +127,11 @@ public class NotesListFragment extends Fragment implements LoaderManager.LoaderC
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Note note = notesArrayList.get(position);
                         sf.showToastMessage(view.getContext(), "LongClick: " + note.getId() + " " + note.getSubject(), false);
-
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, note.getId() + " " + note.getSubject() + " " + note.getContent());
                         sendIntent.setType("text/plain");
                         startActivity(Intent.createChooser(sendIntent, note.getId() + " " + note.getSubject() + " " + note.getContent()));
-//                        startActivity(sendIntent);
-
                         return true;
                     }
                 }

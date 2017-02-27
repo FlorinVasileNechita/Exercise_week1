@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="training.exercise_week1">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <permission android:name="training.exercise_week1.contentProvider.NotesContentProvider.READ_ALL_HHHHHHHHHH"
+        android:protectionLevel="normal" />
+    
+    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,16 +23,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <provider
-            android:name=".contentProvider.NotesContentProvider"
-            android:authorities="training.exercise_week1.contentProvider"
 
-            />
+        <provider
+            android:name="training.exercise_week1.contentProvider.NotesContentProvider"
+            android:authorities="training.exercise_week1.contentProvider"
+            android:exported="true"
+            android:permission="training.exercise_week1.contentProvider.NotesContentProvider.READ_ALL_HHHHHHHHHH"
+             />
         
-        
+
+
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
+
 
 </manifest>

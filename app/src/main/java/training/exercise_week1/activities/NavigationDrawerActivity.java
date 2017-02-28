@@ -31,7 +31,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_activity);
 
-        navigationDrawerMenuItems = new String[]{"Notes list", "Edit note", "About"};
+        navigationDrawerMenuItems = new String[]{"Notes list", "Edit note", "About", "Settings"};
 
         navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
         navigationDrawerMenu = (ListView) findViewById(R.id.navigation_drawer_menu);

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import training.exercise_week1.fragments.SettingsFragment;
 import training.exercise_week1.model.Note;
 import training.exercise_week1.R;
 import training.exercise_week1.fragments.AboutFragment;
@@ -51,6 +52,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Notes
                     replaceFragment(new EditNoteFragment(), null);
                 } else if (position == 2) {
                     replaceFragment(new AboutFragment(), null);
+                } else if (position == 3) {
+                    replaceFragment(new SettingsFragment(), null);
                 }
             }
         });

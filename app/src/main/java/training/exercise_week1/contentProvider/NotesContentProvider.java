@@ -18,7 +18,7 @@ import java.util.HashSet;
 import training.exercise_week1.database.NotesDatabaseHelper;
 import training.exercise_week1.database.NotesTable;
 
-
+//https://thinkandroid.wordpress.com/2010/01/13/writing-your-own-contentprovider/
 public class NotesContentProvider extends ContentProvider {
 
     private NotesDatabaseHelper notesDatabaseHelper;

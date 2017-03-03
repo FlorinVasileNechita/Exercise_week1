@@ -25,35 +25,6 @@
         android:fastScrollEnabled="false" />
 
     <Button
-        android:id="@+id/addNoteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/add_note_button" />
-
-    <Button
-        android:id="@+id/currentDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="Date+Time" />
-
-    <TextView
-        android:text="Click row to delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_clickToDelete"
-        android:layout_below="@+id/listView"
-        android:layout_alignRight="@+id/addNoteButton"
-        android:layout_alignEnd="@+id/addNoteButton"
-        android:layout_marginRight="26dp"
-        android:layout_marginEnd="26dp"
-        android:textColor="@color/colorAccent" />
-
-    <Button
         android:text="Delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,6 +32,55 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/deleteNotes" />
+
+    <Button
+        android:id="@+id/addNoteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_note_button"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/deleteNotes"
+        android:layout_toEndOf="@+id/deleteNotes" />
+
+    <TextView
+        android:text="Click row to delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_clickToDelete"
+        android:layout_marginRight="28dp"
+        android:layout_marginEnd="28dp"
+        android:textColor="@color/colorAccent"
+        android:layout_above="@+id/deleteNotes"
+        android:layout_alignRight="@+id/addNoteButton"
+        android:layout_alignEnd="@+id/addNoteButton" />
+
+    <Button
+        android:id="@+id/currentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date+Time"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/addNoteButton"
+        android:layout_toEndOf="@+id/addNoteButton" />
+
+    <Button
+        android:text="Share NFC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView"
+        android:layout_toRightOf="@+id/currentDate"
+        android:id="@+id/shareViaNFCButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Click to share via NFC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView_clickToDelete"
+        android:id="@+id/textView_shareNFC"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>
